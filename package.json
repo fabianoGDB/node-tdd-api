@@ -25,5 +25,9 @@
     "jest": "^30.0.4",
     "lint-staged": "^16.1.2",
     "standard": "^17.1.2"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.16.2"
   }
 }
