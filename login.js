@@ -1,16 +1,33 @@
-module.exports = () => {
-    router.post('/signup', new SignUpRouter().route)
-};
-
-// singup-router.js
 const express = require('express');
 const router = express.Router();
 
+module.exports = () => {
+    const router = new SignUpRouter();
+    router.post('/signup', SignUpRouExpressRouterAdapterter.adapt(router))
+};
+
+class ExpressRouterAdapter {
+    static adapt(router){
+        return async (req, res) => {
+            const httpRequest = {
+                body: req.body
+            }
+            router.route(httpRequest);
+        }
+    }
+}
+
+// singup-router.js
+
 class SignUpRouter {
-    async route (req, res) {
-        const { email, password, repeatPassword } = req.body;
-        new SignUpUseCase().signUp(email, password, repeatPassword)
-        return res.status(400).json({ error: 'password must be equal to repeatPassword' })
+    async route (httpRequest) {
+        const { email, password, repeatPassword } = httpRequest.body;
+        const user = new SignUpUseCase().signUp(email, password, repeatPassword)
+        return {
+            statusCore: 200,
+            body: user
+        };
+        // return res.status(400).json({ error: 'password must be equal to repeatPassword' })
     }
 }
 
