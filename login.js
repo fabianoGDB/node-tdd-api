@@ -3,7 +3,7 @@ const router = express.Router();
 
 module.exports = () => {
     const router = new SignUpRouter();
-    router.post('/signup', SignUpRouExpressRouterAdapterter.adapt(router))
+    router.post('/signup', ExpressRouterAdapter.adapt(router))
 };
 
 class ExpressRouterAdapter {
@@ -12,13 +12,14 @@ class ExpressRouterAdapter {
             const httpRequest = {
                 body: req.body
             }
-            router.route(httpRequest);
+            const httpResponse = await router.route(httpRequest);
+            res.status(httpResponse.statusCode).json(httpResponse.body);
         }
     }
 }
 
+// Presentation Layer
 // singup-router.js
-
 class SignUpRouter {
     async route (httpRequest) {
         const { email, password, repeatPassword } = httpRequest.body;
@@ -31,7 +32,7 @@ class SignUpRouter {
     }
 }
 
-
+// Domain Layer
 // singup-usecase.js
 class SignUpUseCase {
     async signUp(email, password, repeatPassword) {
@@ -41,6 +42,7 @@ class SignUpUseCase {
     }
 }
 
+// Infra Layer
 // add-acount-repository.js
 const mongoose = require('mongoose');
 const AccountModel = mongoose.model('Account');
