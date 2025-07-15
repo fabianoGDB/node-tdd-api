@@ -19,15 +19,20 @@
     }
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "husky": "^9.1.7",
+    "i": "^0.3.7",
     "jest": "^30.0.4",
     "lint-staged": "^16.1.2",
-    "standard": "^17.1.2"
+    "npm": "^11.4.2",
+    "standard": "^17.1.2",
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
     "express": "^5.1.0",
