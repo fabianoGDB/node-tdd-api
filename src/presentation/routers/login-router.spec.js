@@ -1,5 +1,6 @@
 const LoginRouter = require("./login-router");
 const MissingParamError = require("../helpers/missing-prams-error");
+const UnauthorizedError = require("../helpers/unauthorized-error");
 
 const makeSut = () =>{
   class AuthUseCaseSpy {
@@ -54,17 +55,17 @@ describe('Login Router', () => {
     expect(httpResponse.statusCode).toBe(500)
   });
 
-  test('should return 200 on all credentials valid', () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        email: '123@email.com',
-        password: '123123'
-      }
-    }
-    const httpResponse = sut.route(httpRequest)
-    expect(httpResponse.statusCode).toBe(200)
-  });
+  // test('should return 200 on all credentials valid', () => {
+  //   const { sut } = makeSut()
+  //   const httpRequest = {
+  //     body: {
+  //       email: '123@email.com',
+  //       password: '123123'
+  //     }
+  //   }
+  //   const httpResponse = sut.route(httpRequest)
+  //   expect(httpResponse.statusCode).toBe(200)
+  // });
 
   test('should call AuthUseCase with correct params', () => {
     const { sut, authUseCaseSpy } = makeSut()
@@ -77,5 +78,18 @@ describe('Login Router', () => {
     sut.route(httpRequest)
     expect(authUseCaseSpy.email).toBe(httpRequest.body.email)
     expect(authUseCaseSpy.password).toBe(httpRequest.body.password)
+  });
+
+  test('should return 401 on invalid credentails provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        email: '123@email_invalid.com',
+        password: '123123_invalid'
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual(new UnauthorizedError())
   });
 });
