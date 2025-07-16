@@ -1,4 +1,5 @@
 const MissingParamError = require("./missing-prams-error");
+const ServerError = require("./server-error");
 const UnauthorizedError = require("./unauthorized-error");
 
 module.exports = class HttpResponse {
@@ -10,7 +11,8 @@ module.exports = class HttpResponse {
   }
   static internalError(){
     return {
-        statusCode: 500
+        statusCode: 500,
+        body: new ServerError()
       }
   }static unauthorizedError(){
     return {
@@ -18,9 +20,10 @@ module.exports = class HttpResponse {
         body: new UnauthorizedError()
       }
   }
-  // static success(){
-  //   return {
-  //       statusCode: 200
-  //     }
-  // }
+  static success(data){
+    return {
+        statusCode: 200,
+        body: data
+      }
+  }
 }
