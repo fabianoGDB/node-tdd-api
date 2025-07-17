@@ -4,7 +4,10 @@
   "description": "��#\u0000 \u0000n\u0000o\u0000d\u0000e\u0000-\u0000t\u0000d\u0000d\u0000-\u0000a\u0000p\u0000i\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent --colors --noStackTrace --passWithNoTests",
+    "test:unit": "npm test -- --watch -c jest-unit-config.ts",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "jest:init": "jest create-jest"
   },
   "lint-staged": {
@@ -15,7 +18,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test:ci"
     }
   },
   "standard": {
