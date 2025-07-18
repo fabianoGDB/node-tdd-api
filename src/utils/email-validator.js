@@ -1,9 +1,7 @@
 const validator = require("validator");
 
-module.exports = { EmailValidator };
-
-class EmailValidator {
+module.exports = class EmailValidator {
   isValid(email) {
     return validator.isEmail(email);
   }
-}
+};
