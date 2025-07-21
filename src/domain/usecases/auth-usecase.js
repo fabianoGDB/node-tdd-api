@@ -18,7 +18,7 @@ module.exports = class AuthUseCase {
       return null;
     }
 
-    return user;
+    return null;
   }
 };
 
