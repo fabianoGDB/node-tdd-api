@@ -1,16 +1,22 @@
-const { MissingParamError, InvalidParamError } = require("../../utils/erros");
+const { MissingParamError } = require("../../utils/erros");
 const AuthUseCase = require("./auth-usecase");
 
-const makeSut = () => {
+const makeEncrypter = () => {
   class EncrypterSpy {
     async compare(password, hashedPassword) {
       this.password = password;
       this.hashedPassword = hashedPassword;
+      return this.isValid;
     }
   }
 
   const encrypterSpy = new EncrypterSpy();
+  encrypterSpy.isValid = true;
 
+  return encrypterSpy;
+};
+
+const makeLoadUserByEmailRepositorySpy = () => {
   class LoadUserByEmailRepositorySpy {
     async load(email) {
       this.email = email;
@@ -21,6 +27,13 @@ const makeSut = () => {
   loadUserByEmailRepositorySpy.user = {
     password: "hased_password",
   };
+
+  return loadUserByEmailRepositorySpy;
+};
+
+const makeSut = () => {
+  const encrypterSpy = makeEncrypter();
+  const loadUserByEmailRepositorySpy = makeLoadUserByEmailRepositorySpy();
   const sut = new AuthUseCase(loadUserByEmailRepositorySpy, encrypterSpy);
   return {
     sut,
@@ -81,6 +94,7 @@ describe("Auth UseCase", () => {
 
   test("should call Encrypter with correct values", async () => {
     const { sut, loadUserByEmailRepositorySpy, encrypterSpy } = makeSut();
+    encrypterSpy.isValid = false;
     await sut.auth("valid_email@mail.com", "any_password");
     expect(encrypterSpy.password).toBe("any_password");
     expect(encrypterSpy.hashedPassword).toBe(
