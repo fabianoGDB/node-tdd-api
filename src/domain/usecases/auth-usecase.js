@@ -27,10 +27,3 @@ module.exports = class AuthUseCase {
     return null;
   }
 };
-
-// if (!this.loadUserByEmailRepository) {
-//   throw new MissingParamError("loadUserByEmailRepository");
-// }
-// if (!this.loadUserByEmailRepository.load) {
-//   throw new InvalidParamError("loadUserByEmailRepository");
-// }
